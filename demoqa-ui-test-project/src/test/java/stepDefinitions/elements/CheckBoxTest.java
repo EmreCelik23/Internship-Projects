@@ -27,6 +27,9 @@ public class CheckBoxTest {
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
         WebDriverManager.chromedriver().setup();
 
+        options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
+
         driver = new ChromeDriver(options);
         page = new CheckBoxPage(driver);
 
@@ -69,7 +72,8 @@ public class CheckBoxTest {
     }
 
     @When("the user selects the Downloads checkbox")
-    public void the_user_selects_the_downloads_checkbox() {
+    public void the_user_selects_the_downloads_checkbox() throws InterruptedException {
+        Thread.sleep(300);
         page.selectDownloadsBox();
     }
 

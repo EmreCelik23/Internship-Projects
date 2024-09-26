@@ -9,6 +9,8 @@ import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.forms.PracticeFormPage;
 import static org.junit.Assert.*;
 
@@ -17,6 +19,7 @@ import java.time.Duration;
 public class PracticeFormTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private PracticeFormPage page;
     private String fname, lname, email, gender, phone, picturePath, curAddress, state, city;
     private String[] date, hobbies, subjects;
@@ -27,8 +30,12 @@ public class PracticeFormTest {
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
         WebDriverManager.chromedriver().setup();
 
+        options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
+
         driver = new ChromeDriver(options);
         page = new PracticeFormPage(driver);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -39,7 +46,7 @@ public class PracticeFormTest {
         email = "emrecelik@gmail.com";
         gender = "Male";phone = "0555111333";
         date = new String[]{"20","March","2003"};
-        picturePath = "C:\\Users\\temrecelik\\IdeaProjects\\swagger-petstore-project\\src\\test\\java\\resources\\mhy.jpg";
+        picturePath = "src/test/resources/images/DameTime.png";
         curAddress = "Umraniye/Istanbul";
         state = "Haryana";
         city = "Panipat";
@@ -79,6 +86,8 @@ public class PracticeFormTest {
     }
     @Then("a confirmation dialog should appear with the submitted information")
     public void a_confirmation_dialog_should_appear_with_the_submitted_information() {
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(1) > td:nth-child(2)"))));
+
         String fullNameTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(1) > td:nth-child(2)")).getText();
         String emailTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(2) > td:nth-child(2)")).getText();
         String genderTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(3) > td:nth-child(2)")).getText();
@@ -89,7 +98,7 @@ public class PracticeFormTest {
         String pictureNameTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(8) > td:nth-child(2)")).getText();
         String addressTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(9) > td:nth-child(2)")).getText();
         String stateCityTable = driver.findElement(By.cssSelector("body > div.fade.modal.show > div > div > div.modal-body > div > table > tbody > tr:nth-child(10) > td:nth-child(2)")).getText();
-        String[] parts = picturePath.split("\\\\");
+        String[] parts = picturePath.split("/");
         String fileName = parts[parts.length - 1];
 
         assertEquals(fullNameTable, (fname + " " + lname));

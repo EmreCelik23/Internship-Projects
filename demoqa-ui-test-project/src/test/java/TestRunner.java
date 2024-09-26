@@ -27,18 +27,11 @@ public class TestRunner {
         String buildNumber = "1";
         String projectName = "DemoQA UI Test";
 
-        // Set up the configuration for the report
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         configuration.setBuildNumber(buildNumber);
 
-        /* Optionally, you can add classifications
-        configuration.addClassifications("Platform", "Windows");
-        configuration.addClassifications("Browser", "Chrome");
-        configuration.addClassifications("Branch", "release/1.0"); */
-
-        // Generate the report using the JSON files and the configuration
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
-        reportBuilder.generateReports();   // Generates the HTML report in the specified directory
+        reportBuilder.generateReports();
     }
 
 }
